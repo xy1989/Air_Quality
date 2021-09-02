@@ -3,6 +3,65 @@ import requests
 
 class Location:
     base_url = "http://ZiptasticAPI.com/"  # call to Ziptastic api
+    states = {
+        'AK': 'Alaska',
+        'AL': 'Alabama',
+        'AR': 'Arkansas',
+        'AS': 'American Samoa',
+        'AZ': 'Arizona',
+        'CA': 'California',
+        'CO': 'Colorado',
+        'CT': 'Connecticut',
+        'DC': 'District of Columbia',
+        'DE': 'Delaware',
+        'FL': 'Florida',
+        'GA': 'Georgia',
+        'GU': 'Guam',
+        'HI': 'Hawaii',
+        'IA': 'Iowa',
+        'ID': 'Idaho',
+        'IL': 'Illinois',
+        'IN': 'Indiana',
+        'KS': 'Kansas',
+        'KY': 'Kentucky',
+        'LA': 'Louisiana',
+        'MA': 'Massachusetts',
+        'MD': 'Maryland',
+        'ME': 'Maine',
+        'MI': 'Michigan',
+        'MN': 'Minnesota',
+        'MO': 'Missouri',
+        'MP': 'Northern Mariana Islands',
+        'MS': 'Mississippi',
+        'MT': 'Montana',
+        'NA': 'National',
+        'NC': 'North Carolina',
+        'ND': 'North Dakota',
+        'NE': 'Nebraska',
+        'NH': 'New Hampshire',
+        'NJ': 'New Jersey',
+        'NM': 'New Mexico',
+        'NV': 'Nevada',
+        'NY': 'New York',
+        'OH': 'Ohio',
+        'OK': 'Oklahoma',
+        'OR': 'Oregon',
+        'PA': 'Pennsylvania',
+        'PR': 'Puerto Rico',
+        'RI': 'Rhode Island',
+        'SC': 'South Carolina',
+        'SD': 'South Dakota',
+        'TN': 'Tennessee',
+        'TX': 'Texas',
+        'UT': 'Utah',
+        'VA': 'Virginia',
+        'VI': 'Virgin Islands',
+        'VT': 'Vermont',
+        'WA': 'Washington',
+        'WI': 'Wisconsin',
+        'WV': 'West Virginia',
+        'WY': 'Wyoming'
+    }
 
     def __init__(self, zipcode):
         self.url = self.base_url + zipcode
@@ -10,27 +69,38 @@ class Location:
     def get(self):
         response = requests.get(self.url)
         content = response.json()
-        self.country = content['country']
-        self.state = content['state']
-        self.city = content['city']
+        self.country = "USA"
+        self.state = self.states[content['state']]
+        self.city = content['city'].title()
+        AirQuality(self.country, self.state, self.city)
 
 
-class AirQuality(Location):
+class AirQuality:
     api_key = "823383ea-7c32-4251-a3e4-d235a8748872"
-    url = f"http://api.airvisual.com/v2/city?city=" \
-               f"{self.city}&state={self.state}&" \
-               f"country={self.country}&" \
-               f"key={api_key}"
 
-    def get(self):
-        response = requests.get(self.url)
-        content = response.json()
-        print(content)
+    def __init__(self, country, state, city):
+        self.country = country
+        self.state = state
+        self.city = city
+
+        self.url = f"http://api.airvisual.com/v2/city?" \
+                   f"city= {self.city}&" \
+                   f"state= {self.state}&" \
+                   f"country= {self.country}&" \
+                   f"key={self.api_key}"
+
+        print(self.url)
+
+    # def get(self):
+    #     response = requests.get(self.url)
+    #     content = response.json()
+    #     print(content)
 
 
 if __name__ == "__main__":
     zipcode = input("Please enter a zipcode: ")
     Location(zipcode).get()
+
 
 
 
