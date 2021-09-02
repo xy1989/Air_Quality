@@ -67,10 +67,11 @@ class Location:
         self.url = self.base_url + zipcode
 
     def get(self):
+        """Get the location city and state from zipcode"""
         response = requests.get(self.url)
         content = response.json()
         self.country = "USA"
-        self.state = self.states[content['state']]
+        self.state = self.states[content['state']]  # convert abbreviation to full name
         self.city = content['city'].title()
         AirQuality(self.country, self.state, self.city)
 
@@ -89,19 +90,15 @@ class AirQuality:
                    f"country= {self.country}&" \
                    f"key={self.api_key}"
 
-        print(self.url)
+        self.get()
 
-    # def get(self):
-    #     response = requests.get(self.url)
-    #     content = response.json()
-    #     print(content)
+    def get(self):
+        """Retrieve air quality index"""
+        response = requests.get(self.url)
+        content = response.json()
+        aqi = content['data']['current']['pollution']['aqius']
 
 
 if __name__ == "__main__":
     zipcode = input("Please enter a zipcode: ")
     Location(zipcode).get()
-
-
-
-
-
