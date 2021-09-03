@@ -1,4 +1,9 @@
 import requests
+from kivymd.app import MDApp
+from kivy.lang import Builder
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivy.core.window import Window
+Window.size = (375, 812)
 
 
 class Location:
@@ -97,8 +102,19 @@ class AirQuality:
         response = requests.get(self.url)
         content = response.json()
         aqi = content['data']['current']['pollution']['aqius']
+        print(aqi)
 
 
-if __name__ == "__main__":
-    zipcode = input("Please enter a zipcode: ")
-    Location(zipcode).get()
+class Root(MDBoxLayout):
+
+    def add_zipcode(self):
+        pass
+
+
+class MainApp(MDApp):
+    def build(self):
+        Builder.load_file("frontend.kv")
+        return Root()
+
+
+MainApp().run()
