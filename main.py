@@ -1,4 +1,5 @@
 import requests
+from kivy.properties import StringProperty
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -102,13 +103,22 @@ class AirQuality:
         response = requests.get(self.url)
         content = response.json()
         aqi = content['data']['current']['pollution']['aqius']
-        print(aqi)
+        return aqi
 
 
 class Root(MDBoxLayout):
 
-    def add_zipcode(self):
-        pass
+    def get_zipcode(self):
+        zipcode = self.ids.zipcode.text
+        if zipcode == "":
+            self.ids.zipcode.text = "Please enter a valid zipcode."
+        else:
+            Location(zipcode).get()
+            self.ids.zipcode.text = ""
+
+    def get_air_quality(self, aqi):
+        self.ids.result.text = str(aqi)
+        print(aqi)
 
 
 class MainApp(MDApp):

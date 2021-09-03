@@ -1,14 +1,21 @@
 <Root>:
     orientation: "vertical"
     Image:
-        source: "img/1F600_color.png"
+        source: "img/1F30E_color.png"
+        size: self.texture_size
+        size_hint_y: .4
     MDLabel:
-        text: "Air Quality Index"
+        id: result
+        halign: "center"
+        text: "Determine the Air Quality Index!"
+        size_hint_y: .3
     MDTextField:
+        id: zipcode
         hint_text: "Enter zipcode"
         mode: "rectangle"
     MDTextButton:
         text: "Search"
+        on_press: root.get_zipcode()
 
 
 
