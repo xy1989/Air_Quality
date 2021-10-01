@@ -1,4 +1,5 @@
 import requests
+from kivy.app import App
 from kivy.properties import StringProperty
 from kivymd.app import MDApp
 from kivy.lang import Builder
@@ -102,12 +103,12 @@ class AirQuality:
         """Retrieve air quality index"""
         response = requests.get(self.url)
         content = response.json()
-        aqi = content['data']['current']['pollution']['aqius']
-        return aqi
+        self.aqi = str(content['data']['current']['pollution']['aqius'])
+        app = App.get_running_app()  # create instance of original app
+        app.root.get_air_quality(self.aqi)
 
 
 class Root(MDBoxLayout):
-
     def get_zipcode(self):
         zipcode = self.ids.zipcode.text
         if zipcode == "":
@@ -117,8 +118,30 @@ class Root(MDBoxLayout):
             self.ids.zipcode.text = ""
 
     def get_air_quality(self, aqi):
-        self.ids.result.text = str(aqi)
-        print(aqi)
+        self.ids.result.text = aqi
+        aqi = int(aqi)
+        if aqi >= 301:
+            self.ids.interpretation.text = "Hazardous" + "\n" + \
+                                           "health warning of emergency conditions: everyone is more " \
+                                           "likely to be affected."
+        elif aqi >= 201:
+            self.ids.interpretation.text = "Very Unhealthy" + "\n" + \
+                                           "Health alert: The risk of health effects is increased for everyone."
+        elif aqi >= 151:
+            self.ids.interpretation.text = "Unhealthy" + "\n" + \
+                                           "Some members of the general public may experience health effects; " \
+                                           "members of sensitive groups may experience more serious health effects."
+        elif aqi >= 101:
+            self.ids.interpretation.text = "Unhealthy for Sensitive Groups" + "\n" + \
+                                           "Members of sensitive groups may experience health effects. " \
+                                           "The general public is less likely to be affected."
+        elif aqi >= 51:
+            self.ids.interpretation.text = "Moderate" + "\n" + \
+                                           "Air quality is acceptable. However, there may be a risk for some people, " \
+                                           "particularly those who are unusually sensitive to air pollution."
+        else:
+            self.ids.interpretation.text = "Good" + "\n" + \
+                                           "Air quality is satisfactory, and air pollution poses little or no risk."
 
 
 class MainApp(MDApp):
