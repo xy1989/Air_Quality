@@ -1,0 +1,42 @@
+<Root>:
+    cols: 1
+    padding: 15, 15, 15, 15
+    spacing: 10, 10
+    Image:
+        source: "img/1F30E_color.png"
+        size: self.texture_size
+        size_hint_y: .2
+    MDLabel:
+        id: result
+        halign: "center"
+        text: "Determine the Air Quality Index!"
+        size_hint_y: .05
+        font_style: "Body1"
+    MDLabel:
+        id: interpretation
+        halign: "center"
+        text:
+        size_hint_y: .1
+        markup: True
+        font_style: "Body2"
+        md_bg_color:
+    MDTextField:
+        id: zipcode
+        hint_text: "Enter zipcode"
+        mode: "rectangle"
+    MDFillRoundFlatButton:
+        text: "Search"
+        on_press: root.get_zipcode()
+    MDLabel:
+        size_hint_y: 0.0125
+
+
+
+
+
+
+
+
+
+
+
