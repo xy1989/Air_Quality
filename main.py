@@ -1,10 +1,10 @@
 import requests
 from kivy.app import App
-from kivy.properties import StringProperty
 from kivymd.app import MDApp
 from kivy.lang import Builder
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.core.window import Window
+from kivymd.uix.gridlayout import MDGridLayout
+
 Window.size = (375, 812)
 
 
@@ -108,39 +108,48 @@ class AirQuality:
         app.root.get_air_quality(self.aqi)
 
 
-class Root(MDBoxLayout):
+class Root(MDGridLayout):
     def get_zipcode(self):
+        """Validation for zipcode field"""
         zipcode = self.ids.zipcode.text
-        if zipcode == "":
+        if zipcode == "" or zipcode == "Please enter a valid zipcode.":
             self.ids.zipcode.text = "Please enter a valid zipcode."
         else:
             Location(zipcode).get()
             self.ids.zipcode.text = ""
 
     def get_air_quality(self, aqi):
+        """Outputs AQI result and interpretation"""
         self.ids.result.text = aqi
+        self.ids.result.font_style = "H3"
         aqi = int(aqi)
         if aqi >= 301:
-            self.ids.interpretation.text = "Hazardous" + "\n" + \
+            self.ids.interpretation.md_bg_color = 153/255, 0/255, 0/255, 1
+            self.ids.interpretation.text = "[b][size=40]Hazardous[/size][/b]" + "\n" + \
                                            "health warning of emergency conditions: everyone is more " \
                                            "likely to be affected."
         elif aqi >= 201:
-            self.ids.interpretation.text = "Very Unhealthy" + "\n" + \
+            self.ids.interpretation.md_bg_color = 153/255, 51/255, 255/255, 1
+            self.ids.interpretation.text = "[b][size=40]Very Unhealthy[/size][/b]" + "\n" + \
                                            "Health alert: The risk of health effects is increased for everyone."
         elif aqi >= 151:
-            self.ids.interpretation.text = "Unhealthy" + "\n" + \
+            self.ids.interpretation.md_bg_color = 230/255, 46/255, 0/255, 1
+            self.ids.interpretation.text = "[b][size=40]Unhealthy[/size][/b]" + "\n" + \
                                            "Some members of the general public may experience health effects; " \
                                            "members of sensitive groups may experience more serious health effects."
         elif aqi >= 101:
-            self.ids.interpretation.text = "Unhealthy for Sensitive Groups" + "\n" + \
+            self.ids.interpretation.md_bg_color = 255/255, 128/255, 0/255, 1
+            self.ids.interpretation.text = "[b][size=40]Unhealthy for Sensitive Groups[/size][/b]" + "\n" + \
                                            "Members of sensitive groups may experience health effects. " \
                                            "The general public is less likely to be affected."
         elif aqi >= 51:
-            self.ids.interpretation.text = "Moderate" + "\n" + \
+            self.ids.interpretation.md_bg_color = 255/255, 255/255, 0/255, 1
+            self.ids.interpretation.text = "[b][size=40]Moderate[/size][/b]" + "\n" + \
                                            "Air quality is acceptable. However, there may be a risk for some people, " \
                                            "particularly those who are unusually sensitive to air pollution."
         else:
-            self.ids.interpretation.text = "Good" + "\n" + \
+            self.ids.interpretation.md_bg_color = 0/255, 204/255, 0/255, 1
+            self.ids.interpretation.text = "[b][size=40]Good[/size][/b]" + "\n" + \
                                            "Air quality is satisfactory, and air pollution poses little or no risk."
 
 
